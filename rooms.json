@@ -1,0 +1,10 @@
+{
+  "rooms": [
+    {
+      "name": "Developer's Office",
+      "short": "A cluttered basement office.",
+      "long": "You stand in a cluttered basement office, where soundproofing foam lines the walls in jagged sheets.",
+      "image": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f"
+    }
+  ]
+}
