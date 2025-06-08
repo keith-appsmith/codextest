@@ -82,18 +82,13 @@ body {
 
 <div class="container my-4">
 <div class="row g-4">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">📍 Current Location</h5>
-                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" alt="Developer" class="location-img">
-                <h6>The Developer's Office</h6>
-                <p>You stand in a cluttered basement office, where soundproofing foam lines the walls in jagged sheets. RGB lights pulse softly across tangled cables, old computer parts, and leaning shelves crammed with gear. The hum of electronics fills the air, thick with dust and the scent of solder.</p>
-                <div class="border p-2 mb-2">
-                    <div class="fw-bold">Portal to cursed farm</div>
-                    <div>A swirling blue portal hums, pulsing with inviting dread.</div>
-                    <button class="btn btn-default btn-sm mt-2">Go</button>
-                </div>
+                <img id="room-image" class="location-img" alt="Current Room">
+                <h6 id="room-title"></h6>
+                <p id="room-short"></p>
                 <button class="btn btn-room"><i class="bi bi-eye"></i> Look Around</button>
             </div>
         </div>
@@ -105,7 +100,7 @@ body {
         </div>
     </div>
 
-    <div class="col-md-6 d-flex flex-column">
+    <div class="col-md-4 d-flex flex-column">
         <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title">Characters Nearby (1)</h5>
@@ -154,5 +149,20 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<script>
+fetch('rooms.json')
+  .then(r => r.json())
+  .then(data => {
+    const rooms = Array.isArray(data.rooms) ? data.rooms : data;
+    if (!Array.isArray(rooms) || rooms.length === 0) return;
+    const room = rooms[Math.floor(Math.random() * rooms.length)];
+    document.getElementById('room-title').textContent = room.name || '';
+    const img = document.getElementById('room-image');
+    img.src = room.image || '';
+    img.alt = room.name || 'room image';
+    document.getElementById('room-short').textContent = room.short || '';
+  })
+  .catch(() => {});
+</script>
 </body>
 </html>
