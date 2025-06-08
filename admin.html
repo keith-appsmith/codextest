@@ -33,13 +33,44 @@ body {
             <button class="nav-link active" id="room-tab" data-bs-toggle="tab" data-bs-target="#room" type="button" role="tab" aria-controls="room" aria-selected="true">Room</button>
         </li>
         <li class="nav-item" role="presentation">
+            <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Settings</button>
+        </li>
+        <li class="nav-item" role="presentation">
             <button class="nav-link" id="exit-tab" data-bs-toggle="tab" data-bs-target="#exit" type="button" role="tab" aria-controls="exit" aria-selected="false">Exit</button>
         </li>
     </ul>
     <div class="tab-content p-3 border border-top-0" id="adminTabContent">
         <div class="tab-pane fade show active" id="room" role="tabpanel" aria-labelledby="room-tab">
             <h5>Room Administration</h5>
-            <p>Manage rooms here.</p>
+            <form id="roomForm" class="mb-3">
+                <div class="mb-2">
+                    <label for="roomName" class="form-label">Room Name</label>
+                    <input type="text" id="roomName" class="form-control" required>
+                </div>
+                <div class="mb-2">
+                    <label for="roomShort" class="form-label">Short Description</label>
+                    <input type="text" id="roomShort" class="form-control" required>
+                </div>
+                <div class="mb-2">
+                    <label for="roomLong" class="form-label">Long Description</label>
+                    <textarea id="roomLong" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="mb-2">
+                    <label for="roomImage" class="form-label">Image URL</label>
+                    <input type="text" id="roomImage" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Room</button>
+            </form>
+            <div class="mb-3">
+                <label for="roomFile" class="form-label">Import Rooms JSON</label>
+                <input type="file" id="roomFile" class="form-control">
+            </div>
+            <pre id="roomOutput" class="bg-dark p-2 text-white"></pre>
+            <button type="button" id="downloadRooms" class="btn btn-secondary mt-2">Download JSON</button>
+        </div>
+        <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+            <h5>General Settings</h5>
+            <p>Update game settings here.</p>
         </div>
         <div class="tab-pane fade" id="exit" role="tabpanel" aria-labelledby="exit-tab">
             <h5>Exit</h5>
@@ -49,5 +80,55 @@ body {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let rooms = [];
+function renderRooms(){
+    document.getElementById("roomOutput").textContent = JSON.stringify(rooms, null, 2);
+}
+function loadRooms(data){
+    if(Array.isArray(data.rooms)) rooms = data.rooms;
+    else if(Array.isArray(data)) rooms = data;
+    else rooms = [];
+    renderRooms();
+}
+fetch("rooms.json").then(r=>r.json()).then(loadRooms).catch(()=>{});
+
+document.getElementById("roomForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    const room={
+        name: document.getElementById("roomName").value,
+        short: document.getElementById("roomShort").value,
+        long: document.getElementById("roomLong").value,
+        image: document.getElementById("roomImage").value
+    };
+    rooms.push(room);
+    this.reset();
+    renderRooms();
+});
+
+document.getElementById("roomFile").addEventListener("change",function(){
+    const file=this.files[0];
+    if(!file) return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+        try{
+            const data=JSON.parse(e.target.result);
+            loadRooms(data);
+        }catch(err){
+            alert("Invalid JSON");
+        }
+    };
+    reader.readAsText(file);
+});
+
+document.getElementById("downloadRooms").addEventListener("click",function(){
+    const blob=new Blob([JSON.stringify({rooms:rooms},null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="rooms.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+});
+</script>
 </body>
 </html>
