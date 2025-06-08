@@ -61,12 +61,7 @@ body {
                 </div>
                 <button type="submit" class="btn btn-primary">Add Room</button>
             </form>
-            <div class="mb-3">
-                <label for="roomFile" class="form-label">Import Rooms JSON</label>
-                <input type="file" id="roomFile" class="form-control">
-            </div>
             <pre id="roomOutput" class="bg-dark p-2 text-white"></pre>
-            <button type="button" id="downloadRooms" class="btn btn-secondary mt-2">Download JSON</button>
         </div>
         <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
             <h5>General Settings</h5>
@@ -104,30 +99,6 @@ document.getElementById("roomForm").addEventListener("submit",function(e){
     rooms.push(room);
     this.reset();
     renderRooms();
-});
-
-document.getElementById("roomFile").addEventListener("change",function(){
-    const file=this.files[0];
-    if(!file) return;
-    const reader=new FileReader();
-    reader.onload=e=>{
-        try{
-            const data=JSON.parse(e.target.result);
-            loadRooms(data);
-        }catch(err){
-            alert("Invalid JSON");
-        }
-    };
-    reader.readAsText(file);
-});
-
-document.getElementById("downloadRooms").addEventListener("click",function(){
-    const blob=new Blob([JSON.stringify({rooms:rooms},null,2)],{type:"application/json"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
-    a.download="rooms.json";
-    a.click();
-    URL.revokeObjectURL(a.href);
 });
 </script>
 </body>
