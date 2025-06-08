@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Tales of Laurencia</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body {
+    background-color: #1a1a1a;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+.top-bar {
+    background-color: #222;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #444;
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+    <div class="fs-4">Admin Panel</div>
+    <div><a href="index.html" class="btn btn-secondary btn-sm">Back to Game</a></div>
+</div>
+
+<div class="container my-4">
+    <ul class="nav nav-tabs" id="adminTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="room-tab" data-bs-toggle="tab" data-bs-target="#room" type="button" role="tab" aria-controls="room" aria-selected="true">Room</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="exit-tab" data-bs-toggle="tab" data-bs-target="#exit" type="button" role="tab" aria-controls="exit" aria-selected="false">Exit</button>
+        </li>
+    </ul>
+    <div class="tab-content p-3 border border-top-0" id="adminTabContent">
+        <div class="tab-pane fade show active" id="room" role="tabpanel" aria-labelledby="room-tab">
+            <h5>Room Administration</h5>
+            <p>Manage rooms here.</p>
+        </div>
+        <div class="tab-pane fade" id="exit" role="tabpanel" aria-labelledby="exit-tab">
+            <h5>Exit</h5>
+            <p>Use this tab to log out of the admin area.</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
